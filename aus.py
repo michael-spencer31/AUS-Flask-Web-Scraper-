@@ -14,7 +14,13 @@ soup = BeautifulSoup(webpage, "html.parser")
 results = soup.find(id="mainbody")
 table = soup.find('table', class_= "stats-table")
 
-print(table)
+rows = table.find_all("tr")
 
-# print(results.prettify())
+for row in rows[1:]:
+	cells = row.find_all(['td', 'th'])
+
+	cells_text = [cell.get_text(strip=True) for cell in cells]
+	print(cells_text)
+
+
 
