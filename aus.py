@@ -1,26 +1,22 @@
-from urllib.request import Request, urlopen
-from bs4 import BeautifulSoup
-import lxml.html as lh
+import requests
+import flask as Flask
 import pandas as pd
 
-req = Request(
-	url='https://www.atlanticuniversitysport.com/sports/wice/2022-23/standings',
-	headers={'User-Agent': 'Mozilla/5.0'}
-)
-webpage = urlopen(req).read()
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'Sec-Fetch-Site': 'cross-site',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-User': '?1',
+    'Sec-Fetch-Dest': 'document',
+    'Referer': 'https://www.jpx.co.jp/english/markets/index.html',
+    'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7,it;q=0.6,la;q=0.5',
+}
 
-soup = BeautifulSoup(webpage, "html.parser")
+response = requests.get('https://www.atlanticuniversitysport.com/sports/wice/2022-23/standings', headers=headers)
+table = pd.read_html(response.text, attrs={"class": "stats-table"})[0]
 
-results = soup.find(id="mainbody")
-table = soup.find('table', class_= "stats-table")
-
-rows = table.find_all("tr")
-
-for row in rows[1:]:
-	cells = row.find_all(['td', 'th'])
-
-	cells_text = [cell.get_text(strip=True) for cell in cells]
-	print(cells_text)
-
-
-
+print(table)
