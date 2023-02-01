@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>Flask Tutorial</title>
+	<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+	<h1>My first try using Flask</h1>
+	{% for table in standings %}
+			{{titles[loop.index]}}
+			{{table|safe }}
+	{% endfor %}
+</body>
+</html>
